@@ -19,12 +19,14 @@
  *
  * Date: 1/30/2013
  */
+#include <iostream>
 #include "JoystickScaler.h"
 
-int main()
-{
-    JoystickScaler myScaler;
-    myScaler.Testing();
-    //cin.ignore();
-    return 0;
+using namespace std;
+
+int main() {
+	JoystickScaler myScaler;
+	myScaler.Testing();
+	cin.ignore();
+	return 0;
 }
