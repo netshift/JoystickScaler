@@ -93,20 +93,22 @@ void JoystickScaler::ScaleJoystickValues() {
 }
 
 void JoystickScaler::CalculateMotorSpeeds() {
-	//if (inY >= 0) {
-		//going forward
-	//if X is positive Motor R decreases
+	// if X is positive Motor R decreases to cause a turn to the right.
+	
 	// motor R = 1.0 - outX
 	// technically wouldn't work because when = 0 everything stops
-	// scale outX somewhere 1.0 - (outX / 2)
-	leftMotorSpeed = outY;
+
+	// The idea is to attenuate the speed of the motor on the inside of the turn
+	
+	// This algorithm works well if Y is 1.0, but it scretches to a halt if Y = 0.5
+	leftMotorSpeed = outY + (outX / 2);
 	rightMotorSpeed = outY - (outX / 2);
-	//} else {
-		//going backwards
-	//}
-		   
-	//leftMotorSpeed = 0.30;
-	//rightMotorSpeed = 0.40;
+	
+	// enforce the limits of -1.0...1.0 for the motor speeds
+	if (leftMotorSpeed < -1.0)   leftMotorSpeed = -1.0;
+	if (leftMotorSpeed > 1.0)    leftMotorSpeed = 1.0;
+	if (rightMotorSpeed < -1.0)  rightMotorSpeed = -1.0;
+	if (rightMotorSpeed > 1.0)   rightMotorSpeed = 1.0;
    
 }
 
@@ -114,8 +116,9 @@ void JoystickScaler::PrintValues() {
 	// the printf function allows us to make a template for displaying our variables
 	// %0.2f  means to display 2 decimal places.
 	// \t is a tab character, and \n is a new line
-	printf("input %0.2f  %0.2f \t output %0.2f  %0.2f \t", inX, inY, outX, outY);
-	printf("motor left %0.2f \t right %0.2f\n", leftMotorSpeed, rightMotorSpeed);
+	printf("in %0.2f %0.2f", inX, inY);
+	//printf("\t out %0.2f %0.2f", outX, outY);
+	printf("\t motor L: %0.2f \tR: %0.2f\n", leftMotorSpeed, rightMotorSpeed);
 }
 
 
@@ -128,11 +131,30 @@ void JoystickScaler::Testing() {
 	// loop through the possible values for the y-axis,
 	// start with the stick forward (-1.0) and then gradually pulling all the way back to 1.0
 	
-	printf("Testing X and Y Axis:\n");
-   
-	for (simJoyY = -1.0; simJoyY <= 1.0; simJoyY += 0.1)
+	printf("\n== Testing Y Axis forward to back, X neutral:\n");
+	for (simJoyY = -1.0; simJoyY <= 1.0; simJoyY += 0.2)
 	{
-		simJoyX = -(simJoyY) + 0.30;
+		simJoyX = 0.0;
+		InputFromJoystick(simJoyX, simJoyY);
+		ScaleJoystickValues();
+		CalculateMotorSpeeds();
+		PrintValues();
+	}
+	
+	printf("\n== Testing X Axis left to right, Y 100%% Forward:\n");
+	for (simJoyX = -1.0; simJoyX <= 1.0; simJoyX += 0.2)
+	{
+		simJoyY = -1.0;
+		InputFromJoystick(simJoyX, simJoyY);
+		ScaleJoystickValues();
+		CalculateMotorSpeeds();
+		PrintValues();
+	}
+	
+	printf("\n== Testing X Axis left to right, Y 50%% Forward:\n");
+	for (simJoyX = -1.0; simJoyX <= 1.0; simJoyX += 0.2)
+	{
+		simJoyY = -0.5;
 		InputFromJoystick(simJoyX, simJoyY);
 		ScaleJoystickValues();
 		CalculateMotorSpeeds();
