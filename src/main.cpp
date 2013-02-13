@@ -1,32 +1,24 @@
-/*
- * SPAM Programming Team
- * 
+/* SPAM Programming Team
+ *
  * Author: Nathan Taylor
- * Description: SPAM Joystick Main (main.cpp)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Description: SPAM Joystick Code
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Problem: We have a joystick that controls the robot
+ * The values need to be modified so the driver is given more control sensitivity
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Joystick outputs an x and y value that we take as inputs
+ *      Scale the input values
+ *      Then calculate the proper left and right motor speeds
  *
- * Date: 1/30/2013
+ * Date: 1/24/2013
  */
-#include <iostream>
+
 #include "JoystickScaler.h"
 
-using namespace std;
-
-int main() {
-	JoystickScaler myScaler;
-	myScaler.Testing();
-	cin.ignore();
-	return 0;
+int main()
+{	
+    JoystickScaler myScaler;
+    myScaler.Testing();
+    return 0;
 }
+
